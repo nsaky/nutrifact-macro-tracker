@@ -422,16 +422,4 @@ function calculateDailyTotals(logEntries) {
 
 ---
 
-## GitHub Repository Info
-
-**Repository name:** `nutrifact`
-
-**Description:**
-> A food and macro tracker web app built with vanilla JS and the Open Food Facts API. Search 3M+ foods, filter by protein/calories, log meals, and hit your daily targets.
-
-**Topics / Tags to add on GitHub:**
-`javascript` `web-app` `nutrition` `macro-tracker` `open-food-facts` `vanilla-js` `pwa` `localstorage` `fetch-api` `responsive-design`
-
----
-
 *Built for the WAP Individual Project — demonstrating JavaScript, API integration, array HOFs, and responsive UI development.*
