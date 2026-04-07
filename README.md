@@ -1,3 +1,4 @@
+
 # NutriFact — Food & Macro Tracker 🥗
 
 > Search any food. Know exactly what you're eating. Hit your goals every day.
@@ -17,8 +18,6 @@ NutriFact is a responsive web application that lets you search a database of 3 m
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Setup & Running Locally](#setup--running-locally)
-- [API Reference](#api-reference)
-- [Array HOF Usage](#array-hof-usage)
 - [Best Practices Followed](#best-practices-followed)
 
 ---
@@ -66,13 +65,13 @@ This project is built for the WAP (Web Application Programming) course as a grad
 
 ```
 # Search foods by keyword
-GET https://world.openfoodfacts.org/cgi/search.pl?search_terms={query}&json=1&page_size=24&page={page}
+GET [https://world.openfoodfacts.org/cgi/search.pl?search_terms=](https://world.openfoodfacts.org/cgi/search.pl?search_terms=){query}&json=1&page_size=24&page={page}
 
 # Get a single product by barcode
-GET https://world.openfoodfacts.org/api/v0/product/{barcode}.json
+GET [https://world.openfoodfacts.org/api/v0/product/](https://world.openfoodfacts.org/api/v0/product/){barcode}.json
 
 # Search by category
-GET https://world.openfoodfacts.org/category/{category}.json
+GET [https://world.openfoodfacts.org/category/](https://world.openfoodfacts.org/category/){category}.json
 ```
 
 **Sample response fields used:**
@@ -99,8 +98,6 @@ GET https://world.openfoodfacts.org/category/{category}.json
 ## Planned Features
 
 ### Core Features
-
-These are mandatory and will be implemented across Milestones 2 and 3.
 
 #### 1. Food Search
 - Search bar to look up any food by name (e.g. "chicken breast", "brown rice", "whey protein")
@@ -162,18 +159,10 @@ These are mandatory and will be implemented across Milestones 2 and 3.
 
 ### Bonus Features
 
-These are optional enhancements to be implemented in Milestone 3 and 4 if time allows.
-
 #### Debouncing on Search Input
 - Instead of firing an API call on every keystroke, debounce the search input by 500ms
 - Prevents unnecessary API calls and improves performance
 - Implementation: custom `debounce()` utility function wrapping the fetch call
-
-#### Pagination
-- Results split into pages of 24 items
-- Previous / Next page buttons
-- Current page number and total results shown
-- Page resets to 1 when a new search is made or filters are changed
 
 #### Loading Indicators / Skeleton Screens
 - While API call is in progress, show skeleton card placeholders instead of a blank screen
@@ -192,16 +181,6 @@ These are optional enhancements to be implemented in Milestone 3 and 4 if time a
 - Favourites stored in LocalStorage
 - **HOF used:** `filter()` to display only favourited items, `find()` to toggle favourite status
 
-#### Progressive Web App (PWA)
-- Add a `manifest.json` with app name, icons, and theme colour
-- Register a Service Worker to cache the app shell and last-fetched results
-- Users can install NutriFact to their home screen on Android/iOS
-- Basic offline support: if no connection, shows last cached search results
-
-#### Throttling on Filter Sliders
-- Throttle the filter/sort recalculation when sliders are dragged rapidly
-- Prevents janky UI updates on low-end devices
-
 ---
 
 ## Tech Stack
@@ -213,7 +192,6 @@ These are optional enhancements to be implemented in Milestone 3 and 4 if time a
 | Logic | Vanilla JavaScript (ES6+) |
 | API calls | Fetch API (native, no libraries) |
 | Data persistence | LocalStorage (Web Storage API) |
-| PWA | Service Worker + Web App Manifest |
 | Version control | Git + GitHub |
 | Deployment | GitHub Pages / Netlify / Vercel |
 
@@ -229,8 +207,6 @@ Optional: Tailwind CSS may be used for utility classes if styling becomes a bott
 nutrifact/
 │
 ├── index.html              # Main HTML file — app shell
-├── manifest.json           # PWA manifest
-├── service-worker.js       # PWA service worker for offline caching
 │
 ├── css/
 │   ├── reset.css           # CSS reset / normalize
@@ -247,11 +223,10 @@ nutrifact/
 │   ├── log.js              # Meal log — add, remove, calculate totals
 │   ├── storage.js          # LocalStorage read/write helpers
 │   ├── targets.js          # Daily targets logic and progress bars
-│   ├── debounce.js         # Debounce and throttle utility functions
+│   ├── debounce.js         # Debounce utility function
 │   └── app.js              # Entry point — event listeners, init
 │
 └── assets/
-    ├── icons/              # PWA icons (192x192, 512x512)
     └── placeholder.svg     # Fallback image for foods with no photo
 ```
 
@@ -269,7 +244,7 @@ nutrifact/
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/YOUR_USERNAME/nutrifact.git
+git clone https://github.com/nsaky/nutrifact-macro-tracker.git
 cd nutrifact
 ```
 
@@ -294,122 +269,13 @@ python -m http.server 5500
    Open Food Facts is completely free and requires no authentication. The app works immediately after cloning.
 
 ### Important Notes
-- The app must be served over HTTP (not opened as `file://`) for the Fetch API and Service Worker to work correctly.
+- The app must be served over HTTP (not opened as `file://`) for the Fetch API to work correctly.
 - LocalStorage works on `localhost` and deployed URLs. It does not persist across different origins.
-
----
-
-## API Reference
-
-### Search Foods
-
-```javascript
-// js/api.js
-
-const BASE_URL = 'https://world.openfoodfacts.org';
-
-async function fetchFoods(query, page = 1, pageSize = 24) {
-  const url = `${BASE_URL}/cgi/search.pl?search_terms=${encodeURIComponent(query)}&json=1&page_size=${pageSize}&page=${page}&fields=product_name,nutriments,image_url,quantity,categories`;
-
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Failed to fetch foods');
-
-  const data = await response.json();
-  return data; // { products: [...], count: 1234, page: 1 }
-}
-```
-
-### Get Product by Barcode
-
-```javascript
-async function fetchProductByBarcode(barcode) {
-  const url = `${BASE_URL}/api/v0/product/${barcode}.json`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Product not found');
-  const data = await response.json();
-  return data.product;
-}
-```
-
-### Normalise Product Data
-
-```javascript
-// Converts raw API product object into a clean, consistent format
-function normaliseProduct(product) {
-  const n = product.nutriments || {};
-  return {
-    name: product.product_name || 'Unknown Food',
-    image: product.image_url || './assets/placeholder.svg',
-    quantity: product.quantity || '100g',
-    calories: Math.round(n['energy-kcal_100g'] || 0),
-    protein: parseFloat((n['proteins_100g'] || 0).toFixed(1)),
-    carbs: parseFloat((n['carbohydrates_100g'] || 0).toFixed(1)),
-    fat: parseFloat((n['fat_100g'] || 0).toFixed(1)),
-    fiber: parseFloat((n['fiber_100g'] || 0).toFixed(1)),
-    sugar: parseFloat((n['sugars_100g'] || 0).toFixed(1)),
-    sodium: parseFloat((n['sodium_100g'] || 0).toFixed(2)),
-  };
-}
-```
-
----
-
-## Array HOF Usage
-
-This section documents every Higher-Order Function used in the project and exactly where it is used, as required by Milestone 3.
-
-| HOF | Location | Purpose |
-|---|---|---|
-| `map()` | `render.js` | Transform raw API products array into normalised display objects |
-| `filter()` | `filter.js` | Filter foods by minimum protein, maximum calories, maximum fat |
-| `filter()` | `log.js` | Remove a single entry from the meal log array |
-| `filter()` | `app.js` | Show only favourited foods in the favourites tab |
-| `sort()` | `filter.js` | Sort foods by selected macro (protein desc, calories asc, fat asc, name asc) |
-| `reduce()` | `log.js` | Sum all macro values across meal log entries to get daily totals |
-| `find()` | `storage.js` | Find a specific food in the favourites array by ID to toggle its status |
-| `forEach()` | `render.js` | Iterate over food cards to attach click event listeners |
-
-### Example — filter + sort pipeline
-
-```javascript
-// filter.js
-function applyFiltersAndSort(foods, filters, sortBy) {
-  const filtered = foods
-    .filter(f => f.protein >= filters.minProtein)
-    .filter(f => f.calories <= filters.maxCalories)
-    .filter(f => f.fat <= filters.maxFat);
-
-  const sorted = filtered.sort((a, b) => {
-    if (sortBy === 'protein-desc') return b.protein - a.protein;
-    if (sortBy === 'calories-asc') return a.calories - b.calories;
-    if (sortBy === 'fat-asc') return a.fat - b.fat;
-    if (sortBy === 'name-asc') return a.name.localeCompare(b.name);
-    return 0;
-  });
-
-  return sorted;
-}
-```
-
-### Example — reduce for daily totals
-
-```javascript
-// log.js
-function calculateDailyTotals(logEntries) {
-  return logEntries.reduce((totals, entry) => ({
-    calories: totals.calories + entry.calories,
-    protein: totals.protein + entry.protein,
-    carbs: totals.carbs + entry.carbs,
-    fat: totals.fat + entry.fat,
-  }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
-}
-```
 
 ---
 
 ## Best Practices Followed
 
-- **Regular commits** — one commit per feature or meaningful change, with descriptive messages
 - **Clean code** — consistent 2-space indentation, `camelCase` for variables, `SCREAMING_SNAKE_CASE` for constants
 - **DRY principle** — shared logic (fetch, normalise, storage) extracted into reusable modules
 - **Separation of concerns** — API logic, rendering, filtering, and storage in separate files
@@ -418,7 +284,7 @@ function calculateDailyTotals(logEntries) {
 - **Responsive-first** — CSS written mobile-first, progressively enhanced for larger screens
 - **Semantic HTML** — `<main>`, `<section>`, `<article>`, `<nav>`, `<header>`, `<footer>` used correctly
 - **Accessibility** — `aria-label` on icon buttons, sufficient colour contrast, keyboard-navigable modals
-- **Progressive enhancement** — core search and display works without JS-dependent features like PWA
+- **Progressive enhancement** — core search and display works without JS-dependent features.
 
 ---
 
