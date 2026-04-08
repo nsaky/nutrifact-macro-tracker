@@ -1,0 +1,128 @@
+/* Mobile-First Responsive Layout Fixes (Phase 7 Refinement) */
+
+/* General Sizing & Gaps */
+#search-input {
+  width: 100%;
+  margin-bottom: var(--spacing-3);
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.filters-bar {
+  margin-bottom: var(--spacing-4);
+}
+
+/* Mobile-Only Toggle Button (FAB) */
+.mobile-only {
+  display: flex !important;
+  position: fixed;
+  bottom: var(--spacing-3);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000; /* Above the aside sheet */
+  background-color: #06b6d4; /* Sophisticated Teal-Green */
+  color: white;
+  border: none;
+  border-radius: 9999px; /* Perfect Pill Shape */
+  padding: 10px 24px;
+  height: 44px; /* Consistent height */
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-only:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* Collapsible Mobile Aside (Bottom Sheet) */
+@media (max-width: 1023px) {
+  .meal-log {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    padding-bottom: 80px; /* Space for the floating button */
+    
+    transform: translateY(105%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    visibility: hidden; /* Hide until needed */
+    will-change: transform;
+  }
+
+  .meal-log.aside-open {
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Add subtle overlay when open */
+  body.aside-active::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 999;
+    animation: fadeIn 0.3s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+
+/* Desktop Overrides (1024px+) */
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .meal-log {
+    position: sticky !important;
+    top: var(--spacing-4);
+    transform: none !important;
+    max-height: calc(100vh - var(--spacing-5));
+    width: 100%;
+    z-index: 1;
+    box-shadow: none;
+    border-radius: var(--border-radius-md);
+    overflow-y: auto; /* Enable internal scrolling */
+  }
+
+  .results-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  .results-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

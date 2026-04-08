@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriFact</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- CSS Links (Cascading Order) -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+</head>
+
+<body>
+
+  <header>
+    <img src="assets/logo.svg" alt="NutriFact" class="brand-logo">
+    <div class="header-controls">
+      <button id="toggle-favourites" aria-label="Show Favourites" class="icon-btn"><i class="ph ph-star"></i></button>
+      <button id="theme-toggle" aria-label="Toggle Theme" class="icon-btn"><i class="ph ph-moon"></i></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="search-filters">
+      <input type="search" id="search-input" placeholder="Search for food...">
+    </section>
+
+    <section class="filters-bar">
+      <div class="filter-group">
+        <label for="min-protein">Min Protein: <span id="protein-val">0g</span></label>
+        <input type="range" id="min-protein" min="0" max="100" value="0">
+      </div>
+      <div class="filter-group">
+        <label for="max-calories">Max Calories: <span id="calories-val">1000</span></label>
+        <input type="range" id="max-calories" min="0" max="1000" value="1000">
+      </div>
+      <div class="filter-group">
+        <label for="max-fat">Max Fat: <span id="fat-val">100g</span></label>
+        <input type="range" id="max-fat" min="0" max="100" value="100">
+      </div>
+      <div class="filter-group">
+        <label for="sort-by">Sort By</label>
+        <select id="sort-by">
+          <option value="default">Default</option>
+          <option value="high-protein">Highest Protein</option>
+          <option value="low-calorie">Lowest Calories</option>
+          <option value="low-fat">Lowest Fat</option>
+          <option value="alphabetical">Alphabetical (A-Z)</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="results-grid">
+      <!-- Food cards container -->
+    </section>
+  </main>
+
+  <button id="mobile-log-toggle" class="mobile-only">Daily Target <span>︾</span></button>
+  <aside class="meal-log">
+    <section class="daily-targets">
+      <h3>Daily Targets</h3>
+      <div class="target-inputs">
+        <div class="target-input-group">
+          <label>Cals</label>
+          <input type="number" id="target-calories" value="2000">
+        </div>
+        <div class="target-input-group">
+          <label>Prot</label>
+          <input type="number" id="target-protein" value="150">
+        </div>
+        <div class="target-input-group">
+          <label>Carb</label>
+          <input type="number" id="target-carbs" value="250">
+        </div>
+        <div class="target-input-group">
+          <label>Fat</label>
+          <input type="number" id="target-fat" value="70">
+        </div>
+      </div>
+
+      <div class="target-progress">
+        <div class="progress-item">
+          <div class="progress-header">
+            <span>Calories</span>
+            <span id="target-text-calories" class="target-text">0 / 2000</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-calories" class="progress-fill"></div>
+          </div>
+          <div id="warn-calories" class="target-warning hidden"></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span>Protein</span>
+            <span id="target-text-protein" class="target-text">0 / 150</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-protein" class="progress-fill"></div>
+          </div>
+          <div id="warn-protein" class="target-warning hidden"></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span>Carbs</span>
+            <span id="target-text-carbs" class="target-text">0 / 250</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-carbs" class="progress-fill"></div>
+          </div>
+          <div id="warn-carbs" class="target-warning hidden"></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span>Fat</span>
+            <span id="target-text-fat" class="target-text">0 / 70</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-fat" class="progress-fill"></div>
+          </div>
+          <div id="warn-fat" class="target-warning hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="log-container">
+      <div class="log-header">
+        <h3>Today's Log</h3>
+        <button id="open-reset-modal" aria-label="Reset Log" class="icon-btn"><i class="ph ph-trash"></i></button>
+      </div>
+      <ul id="log-list"></ul>
+      <div class="log-totals">
+        <div class="total-macro">Total: <span id="total-calories">0</span> kcal</div>
+      </div>
+    </section>
+  </aside>
+
+  <!-- Detailed Food Modal -->
+  <div id="food-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+
+      <div class="modal-header">
+        <div class="modal-img-container">
+          <img id="modal-img" src="assets/placeholder.svg" alt="Food Image">
+        </div>
+        <h2 id="modal-title">Food Name</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="serving-size-control">
+          <label for="serving-size">Serving Size (g):</label>
+          <input type="number" id="serving-size" value="100" min="1">
+        </div>
+
+        <div class="macro-grid">
+          <div class="macro-detail">
+            <span class="detail-label">Calories</span>
+            <span class="detail-value" id="modal-calories">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Energy (kJ)</span>
+            <span class="detail-value" id="modal-kj">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Protein</span>
+            <span class="detail-value" id="modal-protein">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Carbs</span>
+            <span class="detail-value" id="modal-carbs">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Fat</span>
+            <span class="detail-value" id="modal-fat">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Fiber</span>
+            <span class="detail-value" id="modal-fiber">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Sugar</span>
+            <span class="detail-value" id="modal-sugar">0</span>
+          </div>
+          <div class="macro-detail">
+            <span class="detail-label">Sodium (mg)</span>
+            <span class="detail-value" id="modal-sodium">0</span>
+          </div>
+        </div>
+
+        <button id="add-to-log-btn">
+          Add to Meal Log
+          <span class="spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="reset-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content reset-confirm">
+      <h3>Clear Today's Log?</h3>
+      <p>This will permanently remove all items from your daily log.</p>
+      <div class="modal-footer">
+        <button id="confirm-reset-yes" class="btn-danger">Yes, Reset</button>
+        <button id="confirm-reset-no" class="btn-secondary">No, Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Links -->
+  <script type="module" src="js/api.js"></script>
+  <script type="module" src="js/render.js"></script>
+  <script type="module" src="js/filter.js"></script>
+  <script type="module" src="js/log.js"></script>
+  <script type="module" src="js/storage.js"></script>
+  <script type="module" src="js/targets.js"></script>
+  <script type="module" src="js/debounce.js"></script>
+  <script type="module" src="js/app.js"></script>
+
+</body>
+
+</html>
