@@ -38,7 +38,7 @@ This project is built for the WAP (Web Application Programming) course as a grad
 
 ## Live Demo
 
-> 🔗 Deployment link will be added after Milestone 4.
+[nutrifact-ten.vercel.app](https://nutrifact-ten.vercel.app)
 
 ---
 
