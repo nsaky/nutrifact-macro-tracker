@@ -1,4 +1,4 @@
-// Replace this with your actual key
+
 const API_KEY = "EJBN3beZtZEUC6Tes0XoPFo1bjrETd7jUdiEO8Pw";
 const BASE_URL = "https://api.nal.usda.gov/fdc/v1";
 
@@ -32,6 +32,6 @@ export async function searchFoods(query) {
     } else {
       console.error("Error fetching data from USDA FoodData Central API:", error);
     }
-    return null; /* Return null to handle the failure gracefully */
+    return null; 
   }
 }

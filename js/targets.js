@@ -3,11 +3,11 @@ import { saveData, loadData } from './storage.js';
 const defaultTargets = { calories: 2000, protein: 150, carbs: 250, fat: 70 };
 let currentTargets = loadData('nutrifact-targets', defaultTargets);
 
-// Module-level variable to store current totals for real-time target adjustment
+
 let latestTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
 
 export function updateProgressBars(currentTotals) {
-  // Store these totals so we can re-apply them when target inputs change
+  
   latestTotals = { ...currentTotals };
 
   const bars = {
@@ -41,22 +41,22 @@ export function updateProgressBars(currentTotals) {
     const targetValue = currentTargets[key] || 1; 
     const percentage = Math.min((total / targetValue) * 100, 100);
 
-    // Update Bar Width
+    
     bar.style.width = `${percentage}%`;
     
-    // Update Text Numerical Display
+    
     if (textSpan) {
       const unit = key === 'calories' ? '' : 'g';
       textSpan.textContent = `${total.toFixed(0)}${unit} / ${targetValue}${unit}`;
     }
 
-    // Update Colors
+    
     bar.classList.remove('progress-good', 'progress-warn', 'progress-danger');
     if (percentage < 75) bar.classList.add('progress-good');
     else if (percentage <= 100) bar.classList.add('progress-warn');
     else bar.classList.add('progress-danger');
 
-    // Handle Warnings Logic
+    
     if (warnEl) {
       if (total > targetValue) {
         const diff = (total - targetValue).toFixed(0);

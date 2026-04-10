@@ -61,7 +61,7 @@ export function renderLog() {
       </li>
     `).join('');
 
-    // Attach event listeners to remove buttons
+    
     logList.querySelectorAll('.remove-log-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = parseInt(btn.dataset.id);

@@ -52,12 +52,12 @@ export function renderFoods(container, rawFoodsArray) {
 
   container.innerHTML = foodsHtml;
 
-  // Add click handlers for the "+" button
+  
   container.querySelectorAll('.add-btn').forEach(btn => {
     btn.addEventListener('click', () => openModal(rawFoodsArray[btn.dataset.index]));
   });
 
-  // Star Button Clicks
+  
   container.querySelectorAll('.star-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();

@@ -24,7 +24,7 @@ const proteinValDisplay = document.getElementById('protein-val');
 const caloriesValDisplay = document.getElementById('calories-val');
 const fatValDisplay = document.getElementById('fat-val');
 
-// Reset Log Modal Selectors
+
 const resetModal = document.getElementById('reset-modal');
 const openResetBtn = document.getElementById('open-reset-modal');
 const confirmResetYes = document.getElementById('confirm-reset-yes');
@@ -92,7 +92,7 @@ if (searchInput) {
   searchInput.addEventListener('input', debounce(handleSearch, 1000));
 }
 
-// Favorites Toggle
+
 if (toggleFavBtn) {
   toggleFavBtn.addEventListener('click', () => {
     showingFavourites = !showingFavourites;
@@ -111,7 +111,7 @@ if (toggleFavBtn) {
   });
 }
 
-// Reset Log Modal Logic
+
 openResetBtn?.addEventListener('click', () => resetModal.classList.remove('hidden'));
 confirmResetNo?.addEventListener('click', () => resetModal.classList.add('hidden'));
 confirmResetYes?.addEventListener('click', () => {
@@ -119,7 +119,7 @@ confirmResetYes?.addEventListener('click', () => {
   resetModal.classList.add('hidden');
 });
 
-// Theme Logic
+
 themeToggleBtn?.addEventListener('click', (e) => {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
@@ -127,7 +127,7 @@ themeToggleBtn?.addEventListener('click', (e) => {
   e.target.textContent = isDark ? '☀️' : '🌙';
 });
 
-// Mobile Log Toggle
+
 const mobileLogToggle = document.getElementById('mobile-log-toggle');
 const asideLog = document.querySelector('.meal-log');
 if (mobileLogToggle && asideLog) {

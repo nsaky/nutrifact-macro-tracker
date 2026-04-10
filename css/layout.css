@@ -1,4 +1,4 @@
-/* Layout and Structure */
+
 * {
   box-sizing: border-box;
 }
@@ -65,7 +65,7 @@ body.dark-mode .meal-log {
   background: rgba(30, 41, 59, 0.8);
 }
 
-/* Desktop Layout */
+
 @media (min-width: 1024px) {
   body {
     grid-template-areas:
