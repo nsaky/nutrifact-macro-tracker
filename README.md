@@ -44,52 +44,40 @@ This project is built for the WAP (Web Application Programming) course as a grad
 
 ## API Used
 
-### Open Food Facts API
+### USDA FoodData Central API
 
 | Property | Details |
 |---|---|
-| Base URL | `https://world.openfoodfacts.org` |
-| Authentication | None — completely free, no API key required |
+| Base URL | `https://api.nal.usda.gov/fdc/v1` |
+| Authentication | API Key required (provided in `js/api.js`) |
 | Format | JSON |
-| Docs | https://wiki.openfoodfacts.org/API |
-| License | Open Database License (ODbL) |
+| Docs | [fdc.nal.usda.gov/api-guide.html](https://fdc.nal.usda.gov/api-guide.html) |
+| License | Public Domain (U.S. Government) |
 
 **Why this API:**
-- 3 million+ real food products from 160+ countries
+- Access to the most authoritative source of food nutrient data in the US
 - Returns complete macro and micronutrient data per product
-- Supports full-text search, category filtering, and pagination out of the box
-- No rate limits for reasonable usage
-- Completely free with no signup
+- Supports full-text search and pagination out of the box
+- Robust and reliable performance
 
 **Key endpoints used:**
 
 ```
 # Search foods by keyword
-GET [https://world.openfoodfacts.org/cgi/search.pl?search_terms=](https://world.openfoodfacts.org/cgi/search.pl?search_terms=){query}&json=1&page_size=24&page={page}
-
-# Get a single product by barcode
-GET [https://world.openfoodfacts.org/api/v0/product/](https://world.openfoodfacts.org/api/v0/product/){barcode}.json
-
-# Search by category
-GET [https://world.openfoodfacts.org/category/](https://world.openfoodfacts.org/category/){category}.json
+GET https://api.nal.usda.gov/fdc/v1/foods/search?query={query}&pageSize=24&api_key={API_KEY}
 ```
 
 **Sample response fields used:**
 ```json
 {
-  "product_name": "Chicken Breast",
-  "nutriments": {
-    "energy-kcal_100g": 165,
-    "proteins_100g": 31,
-    "carbohydrates_100g": 0,
-    "fat_100g": 3.6,
-    "fiber_100g": 0,
-    "sugars_100g": 0,
-    "sodium_100g": 0.074
-  },
-  "image_url": "https://...",
-  "categories": "Meats",
-  "quantity": "100g"
+  "description": "Chicken Breast",
+  "foodNutrients": [
+    { "nutrientName": "Energy", "value": 165, "unitName": "KCAL" },
+    { "nutrientName": "Protein", "value": 31, "unitName": "G" },
+    { "nutrientName": "Carbohydrate, by difference", "value": 0, "unitName": "G" },
+    { "nutrientName": "Total lipid (fat)", "value": 3.6, "unitName": "G" }
+  ],
+  "fdcId": 123456
 }
 ```
 
@@ -227,6 +215,9 @@ nutrifact/
 │   └── app.js              # Entry point — event listeners, init
 │
 └── assets/
+    ├── logo.svg            # App logo
+    ├── favicon.ico         # Browser favicon
+    ├── favicon.png         # High-res favicon
     └── placeholder.svg     # Fallback image for foods with no photo
 ```
 
@@ -265,8 +256,8 @@ python -m http.server 5500
 # then open http://localhost:5500
 ```
 
-4. **No API key needed**
-   Open Food Facts is completely free and requires no authentication. The app works immediately after cloning.
+4. **API key included**
+   The USDA FoodData Central API key is already configured in `js/api.js`. The app works immediately after cloning.
 
 ### Important Notes
 - The app must be served over HTTP (not opened as `file://`) for the Fetch API to work correctly.
